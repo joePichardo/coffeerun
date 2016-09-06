@@ -33,6 +33,8 @@
       });
       console.log(data);
       fn(data); // callback invoked with passed data
+      this.reset(); // resets form on submit
+      this.elements[0].focus(); // focus on first element after reset
     });
   };
 
