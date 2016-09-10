@@ -8,7 +8,7 @@
 
     // throws error if no selector is made instantiating a new FormHandler object
     if(!selector){
-      throw new Error('No selector provided')
+      throw new Error('No selector provided');
     }
     this.$formElement = $(selector); // get object that has references to DOM Elements
     // using 'length' to find if any elements were found
