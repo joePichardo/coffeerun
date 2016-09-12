@@ -38,6 +38,27 @@
     });
   };
 
+  // add a listener for the input event of the form
+  FormHandler.prototype.addInputHandler = function (fn) {
+    console.log('Setting input handler for form');
+    // listen to events on "emailAddress"
+    this.$formElement.on('input', '[name="emailAddress"]', function (event){
+      var emailAddress = event.target.value;
+      // console.log(fn(emailAddress)); // shows if input is correct (true), or not (false)
+
+      // shows error 'message' to the user
+      var message = '';
+      // checks if email has correct pattern
+      if(fn(emailAddress)) {
+        event.target.setCustomValidity('');
+      } else {
+        // displays error message with input 
+        message = emailAddress + ' is not an authorized email address!';
+        event.target.setCustomValidity(message);
+      }
+    });
+  };
+
   App.FormHandler = FormHandler;
   window.App = App;
 
