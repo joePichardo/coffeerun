@@ -7,6 +7,7 @@
   var Truck = App.Truck;
   var DataStore = App.DataStore;
   var FormHandler = App.FormHandler;
+  var Validation = App.Validation;
   var CheckList = App.CheckList;
 
   var myTruck = new Truck('HAL', new DataStore());
@@ -22,5 +23,8 @@
     checkList.addRow.call(checkList, data);
   }); // sets up sumbit listener
   console.log(formHandler);
+
+  // call listener from formHandler and checks with the Validation method
+  formHandler.addInputHandler(Validation.isCompanyEmail);
 
 })(window);
