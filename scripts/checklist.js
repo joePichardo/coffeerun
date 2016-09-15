@@ -24,9 +24,12 @@
       // assign the customer's email address
       var email = event.target.value;
       // call removeRow of that email
-      this.removeRow(email);
+      //this.removeRow(email);
       // invoke fn and pass it email also
-      fn(email);
+      fn(email)
+      .then(function () {
+        this.removeRow(email);
+      }.bind(this));
       // set the context object
     }.bind(this));
   };
