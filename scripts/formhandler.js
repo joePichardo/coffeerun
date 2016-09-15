@@ -32,9 +32,11 @@
         console.log(item.name + ' is ' + item.value)
       });
       console.log(data);
-      fn(data); // callback invoked with passed data
-      this.reset(); // resets form on submit
-      this.elements[0].focus(); // focus on first element after reset
+      fn(data) // callback invoked with passed data
+      .then(function(){ // makes function depend on the result of the previous statement
+        this.reset(); // resets form on submit
+        this.elements[0].focus(); // focus on first element after reset
+      }.bind(this)); // helps with the new scope of the method
     });
   };
 
@@ -52,7 +54,7 @@
       if(fn(emailAddress)) {
         event.target.setCustomValidity('');
       } else {
-        // displays error message with input 
+        // displays error message with input
         message = emailAddress + ' is not an authorized email address!';
         event.target.setCustomValidity(message);
       }
