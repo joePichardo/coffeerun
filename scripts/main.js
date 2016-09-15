@@ -13,7 +13,7 @@
   var CheckList = App.CheckList;
 
   var remoteDS = new RemoteDataStore(SERVER_URL);
-  var myTruck = new Truck('HAL', remoteDS); // new DataStore());
+  var myTruck = new Truck('HAL', new DataStore());
   window.myTruck = myTruck; // global namespace
 
   var checkList = new CheckList(CHECKLIST_SELECTOR);
@@ -22,12 +22,21 @@
 
   // 'call' myTruck.createOrder and checkList.addRow through an anonymous function
   formHandler.addSubmitHandler(function (data) {
-    myTruck.createOrder.call(myTruck, data);
-    checkList.addRow.call(checkList, data);
+    return myTruck.createOrder.call(myTruck, data)
+      .then(function () { //chaining the 'then' function
+        checkList.addRow.call(checkList, data);
+      }/*,
+      // 'then' accepts a second argument when Deferred shifts to the rejected state
+      function () {
+        alert('Server unreachable. Try again later.');
+      }*/
+      );
   }); // sets up sumbit listener
   console.log(formHandler);
 
   // call listener from formHandler and checks with the Validation method
   formHandler.addInputHandler(Validation.isCompanyEmail);
+
+  myTruck.printOrders(checkList.addRow.bind(checkList));
 
 })(window);
