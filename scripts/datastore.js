@@ -4,6 +4,7 @@
 (function(window) {
   'use strict';
   var App = window.App || {}; // if there is an App assign it, else make a new object
+  var Promise = window.Promise; // making promise var to work with updated scripts
 
   function DataStore() { // our function of DataStore
     // making data private through closure
@@ -12,25 +13,34 @@
     };
   }
 
+  function promiseResolvedWith(value) {
+    var promise = new Promise(function (resolve, reject) {
+      resolve(value);
+    });
+    return promise;
+  }
+
 // each instance will have access to the function
 // Example of adding = ds.('me@email.com', 'coffee')
   DataStore.prototype.add = function (key, val) {  // 'add' property takes two arguments, to change instance's data property
-    this.data[key] = val;
+
+    return promiseResolvedWith(null);
   };
 
 // look up data from specific key value
   DataStore.prototype.get = function (key) {
-    return this.data[key];
+    return promiseResolvedWith(this.data[key]);
   };
 
 // method for removing information at specific key value
 DataStore.prototype.remove = function (key) {
   delete this.data[key];
+  return promiseResolvedWith(null);
 };
 
 // look up all data
   DataStore.prototype.getAll = function () {
-    return this.data;
+    return promiseResolvedWith(this.data);
   };
 
   App.DataStore = DataStore; // attached DataStore to the App object
