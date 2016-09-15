@@ -13,25 +13,33 @@
   Truck.prototype.createOrder = function (order) {
     // message console, and use 'add' method from DataStore
     console.log('Adding order for ' + order.emailAddress);
-    this.db.add(order.emailAddress, order); // db is the DataStore instance, which helps call the 'add' function
+    // since 'RemoteDataStore' methods return Deffereds, Truck methods are updated with 'return'
+    return this.db.add(order.emailAddress, order); // db is the DataStore instance, which helps call the 'add' function
   };
 
 // retrieve all the coffee orders from db object
-Truck.prototype.printOrders = function () {
-  // create array of all items in the db object
-  var customerIdArray = Object.keys(this.db.getAll());
+Truck.prototype.printOrders = function (printFn) {
+  return this.db.getAll()
+  .then(function (orders){
+    // create array of all items in the db object
+    var customerIdArray = Object.keys(orders);
 
-  console.log('Truck #' + this.truckId + ' has pending orders:');
-  // go through array and print the array
-  customerIdArray.forEach(function (id) {
-    console.log(this.db.get(id)); // print array using the 'get' function from DataStore
-  }.bind(this)); // this is undefined b/c callback has no owner, bind fixes this
+    console.log('Truck #' + this.truckId + ' has pending orders:');
+    // go through array and print the array
+    customerIdArray.forEach(function (id) {
+      console.log(orders[id]); // print array using the 'get' function from DataStore
+      if(printFn){
+        printFn(orders[id]);
+      }
+    }.bind(this)); // this is undefined b/c callback has no owner, bind fixes this
+  }.bind(this));
+
 };
 
 // customerId is the emailAddress of customer, passed in to remove that order
   Truck.prototype.deliverOrder = function (customerId) {
     console.log('Delivering order for ' + customerId);
-    this.db.remove(customerId);
+    return this.db.remove(customerId);
   };
 
   App.Truck = Truck;
